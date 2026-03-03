@@ -21,7 +21,12 @@ const predict = async (req, res) => {
     }
 
     // Call AI microservice
-    const aiResponse = await axios.post(`${AI_SERVICE_URL}/predict`, { text });
+    // Handle case where AI_SERVICE_URL already ends with /predict from the .env
+    const endpoint = AI_SERVICE_URL.endsWith('/predict') 
+        ? AI_SERVICE_URL 
+        : `${AI_SERVICE_URL}/predict`;
+        
+    const aiResponse = await axios.post(endpoint, { text });
     const result = aiResponse.data;
 
     // Save to prediction history
